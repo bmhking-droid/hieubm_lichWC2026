@@ -9,6 +9,7 @@ const matchesData = [
     code2: "za",
     time: "02:00",
     venue: "Estadio Banorte, Mexico City",
+    score: "2-0",
   },
   {
     date: "12/06/2026",
@@ -19,6 +20,7 @@ const matchesData = [
     code2: "cz",
     time: "09:00",
     venue: "Estadio Akron, Zapopan",
+    score: "2-1",
   },
   {
     date: "13/06/2026",
@@ -29,6 +31,7 @@ const matchesData = [
     code2: "ba",
     time: "02:00",
     venue: "BMO Field, Toronto",
+    score: "1-1",
   },
   {
     date: "13/06/2026",
@@ -39,6 +42,7 @@ const matchesData = [
     code2: "py",
     time: "08:00",
     venue: "SoFi Stadium, Los Angeles",
+    score: "4-1",
   },
   {
     date: "14/06/2026",
@@ -49,6 +53,7 @@ const matchesData = [
     code2: "ch",
     time: "02:00",
     venue: "Địa điểm chưa xác định",
+    score: "1-1",
   },
   {
     date: "14/06/2026",
@@ -59,6 +64,7 @@ const matchesData = [
     code2: "ma",
     time: "05:00",
     venue: "MetLife Stadium, New York",
+    score: "1-1",
   },
   {
     date: "14/06/2026",
@@ -69,6 +75,7 @@ const matchesData = [
     code2: "gb-sct",
     time: "08:00",
     venue: "Gillette Stadium",
+    score: "0-1",
   },
   {
     date: "14/06/2026",
@@ -79,6 +86,7 @@ const matchesData = [
     code2: "tr",
     time: "11:00",
     venue: "BC Place, Vancouver",
+    score: "2-0",
   },
   {
     date: "15/06/2026",
@@ -89,6 +97,7 @@ const matchesData = [
     code2: "cw",
     time: "00:00",
     venue: "NRG Stadium, Houston",
+    score: "7-1",
   },
   {
     date: "15/06/2026",
@@ -99,6 +108,7 @@ const matchesData = [
     code2: "jp",
     time: "03:00",
     venue: "Địa điểm chưa xác định",
+    score: "2-2",
   },
   {
     date: "15/06/2026",
@@ -109,6 +119,7 @@ const matchesData = [
     code2: "ec",
     time: "06:00",
     venue: "Lincoln Financial Field, Philadelphia",
+    score: "1-0",
   },
   {
     date: "15/06/2026",
@@ -119,6 +130,7 @@ const matchesData = [
     code2: "tn",
     time: "09:00",
     venue: "Estadio BBVA, Monterrey",
+    score: "5-1",
   },
   {
     date: "15/06/2026",
@@ -722,14 +734,57 @@ const matchesData = [
   },
 ];
 
+function getMatchKey(match) {
+  return `${match.date}|${match.time}|${match.team1}|${match.team2}`;
+}
+
+function parseMatchDate(match) {
+  const [day, month, year] = match.date.split("/").map(Number);
+  const [hour = 0, minute = 0] = match.time.split(":").map(Number);
+  return new Date(year, month - 1, day, hour, minute);
+}
+
+function getMatchStatus(match) {
+  const now = new Date();
+  const start = parseMatchDate(match);
+  const end = new Date(start.getTime() + 2 * 60 * 60 * 1000);
+  if (now >= start && now < end) return "live";
+  if (now >= end) return "finished";
+  return "upcoming";
+}
+
+function getStatusLabel(status) {
+  if (status === "live") return "TRỰC TIẾP";
+  if (status === "finished") return "ĐÃ KẾT THÚC";
+  return "SẮP DIỄN RA";
+}
+
+matchesData.forEach((m) => {
+  m.id = getMatchKey(m);
+  if (!("score" in m)) m.score = null;
+});
+
+// ================== CODE CHÍNH ==================
 const matchListContainer = document.getElementById("match-list");
 const searchInput = document.getElementById("search-input");
 const groupSelect = document.getElementById("group-select");
+const sortSelect = document.getElementById("sort-select");
 const dateButtons = document.querySelectorAll(".date-btn");
+const tabButtons = document.querySelectorAll(".tab-btn");
+const modal = document.getElementById("match-modal");
+const modalBody = document.getElementById("modal-body");
+const closeModal = document.querySelector(".close-modal");
 
-let selectedDateFilter = "all"; // Mặc định hiển thị tất cả các ngày
+let selectedDateFilter = "all";
+let currentTab = "all";
+let favorites = JSON.parse(localStorage.getItem("wc2026_favorites")) || [];
+if (favorites.length && typeof favorites[0] === "object") {
+  favorites = favorites.map((item) => {
+    if (typeof item === "string") return item;
+    return getMatchKey(item);
+  });
+}
 
-// Hàm chuyển đổi chuỗi tiếng Việt thành không dấu
 function removeVietnameseTones(str) {
   return str
     .normalize("NFD")
@@ -738,54 +793,72 @@ function removeVietnameseTones(str) {
     .replace(/Đ/g, "D");
 }
 
-// Hàm lấy chuỗi ngày định dạng DD/MM/YYYY dựa trên số ngày thêm vào (offset)
 function getFormattedDate(offset = 0) {
   const d = new Date();
   d.setDate(d.getDate() + offset);
-  const day = String(d.getDate()).padStart(2, "0");
-  const month = String(d.getMonth() + 1).padStart(2, "0");
-  const year = d.getFullYear();
-  return `${day}/${month}/${year}`;
+  return `${String(d.getDate()).padStart(2, "0")}/${String(d.getMonth() + 1).padStart(2, "0")}/${d.getFullYear()}`;
+}
+
+function isFavorite(match) {
+  return favorites.includes(match.id);
+}
+
+function toggleFavorite(match) {
+  const key = match.id;
+  if (favorites.includes(key)) {
+    favorites = favorites.filter((f) => f !== key);
+  } else {
+    favorites.push(key);
+  }
+  localStorage.setItem("wc2026_favorites", JSON.stringify(favorites));
+  filterMatches();
 }
 
 function displayMatches(matches) {
   matchListContainer.innerHTML = "";
-
   if (matches.length === 0) {
     matchListContainer.innerHTML =
-      '<p style="grid-column: 1/-1; text-align: center; color: #888; padding: 20px;">Không tìm thấy trận đấu nào thỏa mãn bộ lọc.</p>';
+      '<p style="grid-column:1/-1;text-align:center;color:#888;padding:40px;">Không tìm thấy trận đấu nào.</p>';
     return;
   }
 
   matches.forEach((match) => {
+    const status = getMatchStatus(match);
     const card = document.createElement("div");
-    card.classList.add("match-card");
+    card.classList.add("match-card", status);
 
-    const flag1 = match.code1
-      ? `<span class="fi fi-${match.code1}"></span>`
-      : "";
-    const flag2 = match.code2
-      ? `<span class="fi fi-${match.code2}"></span>`
-      : "";
+    const scoreHTML = match.score
+      ? `<div class="match-score">${match.score}</div>`
+      : `<span class="match-score placeholder">${status === "live" ? "Đang cập nhật" : status === "finished" ? "Kết quả chờ" : "VS"}</span>`;
 
     card.innerHTML = `
-            <div class="match-header">
-                <span>🗓️ ${match.date} - ⏰ <b>${match.time}</b></span>
-                <span class="group-badge">Bảng ${match.group}</span>
-            </div>
-            <div class="match-teams">
-                <div class="team team1">
-                    <span>${match.team1}</span> ${flag1}
-                </div>
-                <div class="match-vs">VS</div>
-                <div class="team team2">
-                    ${flag2} <span>${match.team2}</span>
-                </div>
-            </div>
-            <div class="match-footer">
-                <div class="match-venue">📍 ${match.venue}</div>
-            </div>
-        `;
+      <div class="match-header">
+        <span>🗓️ ${match.date} • ⏰ <b>${match.time}</b></span>
+        <span class="group-badge">Bảng ${match.group}</span>
+      </div>
+      <div class="match-teams">
+        <div class="team team1"><span class="fi fi-${match.code1}"></span> <span>${match.team1}</span></div>
+        <div class="match-vs">${scoreHTML}</div>
+        <div class="team team2"><span>${match.team2}</span> <span class="fi fi-${match.code2}"></span></div>
+      </div>
+      <div class="match-footer">
+        <div class="match-venue">📍 ${match.venue}</div>
+        <div class="match-actions">
+          <span class="status-badge ${status}">${getStatusLabel(status)}</span>
+          <button class="fav-btn ${isFavorite(match) ? "active" : ""}" title="Yêu thích">★</button>
+        </div>
+      </div>
+    `;
+
+    card.addEventListener("click", (e) => {
+      if (e.target.classList.contains("fav-btn")) {
+        e.stopPropagation();
+        toggleFavorite(match);
+      } else {
+        showMatchDetail(match);
+      }
+    });
+
     matchListContainer.appendChild(card);
   });
 }
@@ -795,48 +868,102 @@ function filterMatches() {
     searchInput.value.toLowerCase().trim(),
   );
   const selectedGroup = groupSelect.value;
+  const sortBy = sortSelect.value;
 
-  // Xác định chuỗi ngày cần so khớp tương ứng với bộ lọc nhanh
   const todayStr = getFormattedDate(0);
   const tomorrowStr = getFormattedDate(1);
 
-  const filtered = matchesData.filter((match) => {
-    // 1. Kiểm tra điều kiện tìm kiếm tên đội
+  let filtered = matchesData.filter((match) => {
+    const status = getMatchStatus(match);
     const team1Clean = removeVietnameseTones(match.team1.toLowerCase());
     const team2Clean = removeVietnameseTones(match.team2.toLowerCase());
     const matchesSearch =
-      team1Clean.includes(searchText) || team2Clean.includes(searchText);
+      !searchText ||
+      team1Clean.includes(searchText) ||
+      team2Clean.includes(searchText);
 
-    // 2. Kiểm tra điều kiện lọc theo bảng đấu
     const matchesGroup =
       selectedGroup === "all" || match.group === selectedGroup;
 
-    // 3. Kiểm tra điều kiện lọc theo mốc thời gian (Hôm nay / Ngày mai)
     let matchesDate = true;
-    if (selectedDateFilter === "today") {
-      matchesDate = match.date === todayStr;
-    } else if (selectedDateFilter === "tomorrow") {
+    if (selectedDateFilter === "today") matchesDate = match.date === todayStr;
+    if (selectedDateFilter === "tomorrow")
       matchesDate = match.date === tomorrowStr;
-    }
 
-    return matchesSearch && matchesGroup && matchesDate;
+    let matchesTab = true;
+    if (currentTab === "upcoming") matchesTab = status !== "finished";
+    if (currentTab === "finished") matchesTab = status === "finished";
+    if (currentTab === "favorites") matchesTab = isFavorite(match);
+
+    return matchesSearch && matchesGroup && matchesDate && matchesTab;
   });
+
+  if (sortBy === "group")
+    filtered.sort((a, b) => a.group.localeCompare(b.group));
+  else if (sortBy === "team")
+    filtered.sort((a, b) => a.team1.localeCompare(b.team1));
+  else filtered.sort((a, b) => parseMatchDate(a) - parseMatchDate(b));
 
   displayMatches(filtered);
 }
 
-// Xử lý sự kiện click chuyển đổi giữa các tab ngày
-dateButtons.forEach((btn) => {
-  btn.addEventListener("click", (e) => {
+function showMatchDetail(match) {
+  const status = getMatchStatus(match);
+  const scoreView = match.score
+    ? `<div class="big-score">${match.score}</div>`
+    : `<div class="big-score">${getStatusLabel(status)}</div>`;
+
+  modalBody.innerHTML = `
+    <h2>${match.team1} vs ${match.team2}</h2>
+    <p class="modal-info"><strong>Bảng ${match.group}</strong> — ${match.date} ${match.time}</p>
+    <p class="modal-info"><strong>Sân:</strong> ${match.venue}</p>
+    ${scoreView}
+    <div class="modal-actions">
+      <button onclick="alert('Đã thêm vào Google Calendar (demo)')">📅 Thêm vào lịch</button>
+      <button onclick="toggleFavoriteFromModal('${match.id}')">
+        ${isFavorite(match) ? " Bỏ yêu thích" : "☆ Thêm vào yêu thích"}
+      </button>
+    </div>
+  `;
+  modal.style.display = "flex";
+}
+
+function toggleFavoriteFromModal(id) {
+  const match = matchesData.find((m) => m.id === id);
+  if (match) toggleFavorite(match);
+  modal.style.display = "none";
+}
+
+// Events
+dateButtons.forEach((btn) =>
+  btn.addEventListener("click", () => {
     dateButtons.forEach((b) => b.classList.remove("active"));
-    e.target.classList.add("active");
-    selectedDateFilter = e.target.getAttribute("data-date");
+    btn.classList.add("active");
+    selectedDateFilter = btn.dataset.date;
     filterMatches();
-  });
-});
+  }),
+);
+
+tabButtons.forEach((btn) =>
+  btn.addEventListener("click", () => {
+    tabButtons.forEach((b) => b.classList.remove("active"));
+    btn.classList.add("active");
+    currentTab = btn.dataset.tab;
+    filterMatches();
+  }),
+);
 
 searchInput.addEventListener("input", filterMatches);
 groupSelect.addEventListener("change", filterMatches);
+sortSelect.addEventListener("change", filterMatches);
 
-// Khởi chạy kết xuất danh sách ban đầu
-displayMatches(matchesData);
+closeModal.addEventListener("click", () => (modal.style.display = "none"));
+modal.addEventListener("click", (e) => {
+  if (e.target === modal) modal.style.display = "none";
+});
+
+// Tự cập nhật trạng thái trận đấu mỗi phút
+setInterval(filterMatches, 60_000);
+
+// Khởi chạy
+filterMatches();

@@ -12,21 +12,31 @@
   </head>
   <body>
     <header>
-      <h1>LỊCH THI ĐẤU WORLD CUP 2026</h1>
-      <p>Lịch thi đấu vòng bảng</p>
+      <div class="header-content">
+        <h1>LỊCH THI ĐẤU WORLD CUP 2026</h1>
+        <p>Lịch thi đấu vòng bảng</p>
+      </div>
     </header>
 
     <main class="container">
+      <!-- Tabs -->
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="all">Tất cả trận</button>
+        <button class="tab-btn" data-tab="upcoming">Sắp diễn ra</button>
+        <button class="tab-btn" data-tab="finished">Kết quả</button>
+        <button class="tab-btn" data-tab="favorites">⭐ Yêu thích</button>
+      </div>
+
       <div class="filter-wrapper">
         <div class="filter-controls">
           <input
             type="text"
             id="search-input"
-            placeholder="Tìm kiếm quốc gia (VD: Bồ Đào Nha, Argentina...)"
+            placeholder="Tìm kiếm quốc gia..."
           />
 
           <select id="group-select">
-            <option value="all">Tất cả bảng đấu</option>
+            <option value="all">Tất cả bảng</option>
             <option value="A">Bảng A</option>
             <option value="B">Bảng B</option>
             <option value="C">Bảng C</option>
@@ -36,9 +46,15 @@
             <option value="G">Bảng G</option>
             <option value="H">Bảng H</option>
             <option value="I">Bảng I</option>
-            <option value="J">Bảng J (M10)</option>
-            <option value="K">Bảng K (CR7)</option>
+            <option value="J">Bảng J (Messi)</option>
+            <option value="K">Bảng K (Ronaldo)</option>
             <option value="L">Bảng L</option>
+          </select>
+
+          <select id="sort-select">
+            <option value="time">Theo thời gian</option>
+            <option value="group">Theo bảng đấu</option>
+            <option value="team">Tên đội A-Z</option>
           </select>
         </div>
 
@@ -52,8 +68,16 @@
       <div id="match-list" class="match-grid"></div>
     </main>
 
+    <!-- Modal -->
+    <div id="match-modal" class="modal">
+      <div class="modal-content">
+        <span class="close-modal">×</span>
+        <div id="modal-body"></div>
+      </div>
+    </div>
+
     <footer>
-      <p>&copy; Lịch Thi Đấu World Cup 2026.</p>
+      <p>&copy; 2026 Lịch Thi Đấu World Cup 2026</p>
     </footer>
 
     <script src="script.js"></script>
