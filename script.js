@@ -141,6 +141,7 @@ const matchesData = [
     code2: "cv",
     time: "23:00",
     venue: "Mercedes-Benz Stadium, Atlanta",
+    score: "0-0",
   },
   {
     date: "16/06/2026",
