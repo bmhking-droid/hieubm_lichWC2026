@@ -725,13 +725,35 @@ const matchesData = [
 const matchListContainer = document.getElementById("match-list");
 const searchInput = document.getElementById("search-input");
 const groupSelect = document.getElementById("group-select");
+const dateButtons = document.querySelectorAll(".date-btn");
+
+let selectedDateFilter = "all"; // Mặc định hiển thị tất cả các ngày
+
+// Hàm chuyển đổi chuỗi tiếng Việt thành không dấu
+function removeVietnameseTones(str) {
+  return str
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/đ/g, "d")
+    .replace(/Đ/g, "D");
+}
+
+// Hàm lấy chuỗi ngày định dạng DD/MM/YYYY dựa trên số ngày thêm vào (offset)
+function getFormattedDate(offset = 0) {
+  const d = new Date();
+  d.setDate(d.getDate() + offset);
+  const day = String(d.getDate()).padStart(2, "0");
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const year = d.getFullYear();
+  return `${day}/${month}/${year}`;
+}
 
 function displayMatches(matches) {
   matchListContainer.innerHTML = "";
 
   if (matches.length === 0) {
     matchListContainer.innerHTML =
-      '<p style="grid-column: 1/-1; text-align: center; color: #888; padding: 20px;">Không tìm thấy trận đấu nào.</p>';
+      '<p style="grid-column: 1/-1; text-align: center; color: #888; padding: 20px;">Không tìm thấy trận đấu nào thỏa mãn bộ lọc.</p>';
     return;
   }
 
@@ -739,7 +761,6 @@ function displayMatches(matches) {
     const card = document.createElement("div");
     card.classList.add("match-card");
 
-    // Hàm gen thẻ span chứa cờ (nếu không có code quốc gia thì bỏ trống)
     const flag1 = match.code1
       ? `<span class="fi fi-${match.code1}"></span>`
       : "";
@@ -770,23 +791,52 @@ function displayMatches(matches) {
 }
 
 function filterMatches() {
-  const searchText = searchInput.value.toLowerCase().trim();
+  const searchText = removeVietnameseTones(
+    searchInput.value.toLowerCase().trim(),
+  );
   const selectedGroup = groupSelect.value;
 
+  // Xác định chuỗi ngày cần so khớp tương ứng với bộ lọc nhanh
+  const todayStr = getFormattedDate(0);
+  const tomorrowStr = getFormattedDate(1);
+
   const filtered = matchesData.filter((match) => {
+    // 1. Kiểm tra điều kiện tìm kiếm tên đội
+    const team1Clean = removeVietnameseTones(match.team1.toLowerCase());
+    const team2Clean = removeVietnameseTones(match.team2.toLowerCase());
     const matchesSearch =
-      match.team1.toLowerCase().includes(searchText) ||
-      match.team2.toLowerCase().includes(searchText);
+      team1Clean.includes(searchText) || team2Clean.includes(searchText);
+
+    // 2. Kiểm tra điều kiện lọc theo bảng đấu
     const matchesGroup =
       selectedGroup === "all" || match.group === selectedGroup;
-    return matchesSearch && matchesGroup;
+
+    // 3. Kiểm tra điều kiện lọc theo mốc thời gian (Hôm nay / Ngày mai)
+    let matchesDate = true;
+    if (selectedDateFilter === "today") {
+      matchesDate = match.date === todayStr;
+    } else if (selectedDateFilter === "tomorrow") {
+      matchesDate = match.date === tomorrowStr;
+    }
+
+    return matchesSearch && matchesGroup && matchesDate;
   });
 
   displayMatches(filtered);
 }
 
+// Xử lý sự kiện click chuyển đổi giữa các tab ngày
+dateButtons.forEach((btn) => {
+  btn.addEventListener("click", (e) => {
+    dateButtons.forEach((b) => b.classList.remove("active"));
+    e.target.classList.add("active");
+    selectedDateFilter = e.target.getAttribute("data-date");
+    filterMatches();
+  });
+});
+
 searchInput.addEventListener("input", filterMatches);
 groupSelect.addEventListener("change", filterMatches);
 
-// Khởi chạy lần đầu
+// Khởi chạy kết xuất danh sách ban đầu
 displayMatches(matchesData);

@@ -90,20 +90,27 @@ header p {
   padding: 0 18px;
 }
 
-/* ================= FILTER ================= */
+/* ================= FILTER WRAPPER (STICKY) ================= */
 
-.filter-controls {
+.filter-wrapper {
   position: sticky;
   top: 12px;
   z-index: 100;
-  display: flex;
-  gap: 15px;
   margin-bottom: 30px;
   backdrop-filter: blur(18px);
-  background: rgba(255, 255, 255, 0.7);
-  padding: 14px;
+  background: rgba(255, 255, 255, 0.75);
+  padding: 16px;
   border-radius: 22px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.filter-controls {
+  display: flex;
+  gap: 15px;
 }
 
 .filter-controls input,
@@ -127,6 +134,38 @@ header p {
 
 #search-input {
   flex: 1;
+}
+
+/* ================= DATE SHORTCUT FILTERS ================= */
+
+.date-filters {
+  display: flex;
+  gap: 10px;
+}
+
+.date-btn {
+  padding: 10px 18px;
+  border: 1px solid rgba(200, 200, 200, 0.3);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.9);
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #475569;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.date-btn:hover {
+  background: #f1f5f9;
+  color: var(--primary-color);
+  transform: translateY(-1px);
+}
+
+.date-btn.active {
+  background: linear-gradient(135deg, var(--secondary-color), #0066ff);
+  color: white;
+  border-color: transparent;
+  box-shadow: 0 4px 12px rgba(0, 180, 255, 0.25);
 }
 
 /* ================= GRID ================= */
@@ -358,9 +397,28 @@ footer {
     font-size: 1.8rem;
   }
 
+  .filter-wrapper {
+    position: sticky;
+    top: 8px;
+    padding: 12px;
+    border-radius: 16px;
+    gap: 10px;
+  }
+
   .filter-controls {
     flex-direction: column;
-    position: static;
+    gap: 8px;
+  }
+
+  .date-filters {
+    justify-content: space-between;
+  }
+
+  .date-btn {
+    flex: 1;
+    text-align: center;
+    padding: 10px 8px;
+    font-size: 0.8rem;
   }
 }
 

@@ -17,35 +17,43 @@
     </header>
 
     <main class="container">
-      <div class="filter-controls">
-        <input
-          type="text"
-          id="search-input"
-          placeholder="Tìm kiếm quốc gia (VD: Bồ Đào Nha, Argentina...)"
-        />
+      <div class="filter-wrapper">
+        <div class="filter-controls">
+          <input
+            type="text"
+            id="search-input"
+            placeholder="Tìm kiếm quốc gia (VD: Bồ Đào Nha, Argentina...)"
+          />
 
-        <select id="group-select">
-          <option value="all">Tất cả bảng đấu</option>
-          <option value="A">Bảng A</option>
-          <option value="B">Bảng B</option>
-          <option value="C">Bảng C</option>
-          <option value="D">Bảng D</option>
-          <option value="E">Bảng E</option>
-          <option value="F">Bảng F</option>
-          <option value="G">Bảng G</option>
-          <option value="H">Bảng H</option>
-          <option value="I">Bảng I</option>
-          <option value="J">Bảng J (M10)</option>
-          <option value="K">Bảng K (CR7)</option>
-          <option value="L">Bảng L</option>
-        </select>
+          <select id="group-select">
+            <option value="all">Tất cả bảng đấu</option>
+            <option value="A">Bảng A</option>
+            <option value="B">Bảng B</option>
+            <option value="C">Bảng C</option>
+            <option value="D">Bảng D</option>
+            <option value="E">Bảng E</option>
+            <option value="F">Bảng F</option>
+            <option value="G">Bảng G</option>
+            <option value="H">Bảng H</option>
+            <option value="I">Bảng I</option>
+            <option value="J">Bảng J (M10)</option>
+            <option value="K">Bảng K (CR7)</option>
+            <option value="L">Bảng L</option>
+          </select>
+        </div>
+
+        <div class="date-filters">
+          <button class="date-btn active" data-date="all">Tất cả</button>
+          <button class="date-btn" data-date="today">Hôm nay</button>
+          <button class="date-btn" data-date="tomorrow">Ngày mai</button>
+        </div>
       </div>
 
       <div id="match-list" class="match-grid"></div>
     </main>
 
     <footer>
-      <p>&copy;Lịch Thi Đấu World Cup 2026.</p>
+      <p>&copy; Lịch Thi Đấu World Cup 2026.</p>
     </footer>
 
     <script src="script.js"></script>
