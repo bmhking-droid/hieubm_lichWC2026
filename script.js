@@ -1,4 +1,3 @@
-// Dữ liệu đã được cấu hình thêm mã Quốc gia để gọi Cờ (Ví dụ: mx = Mexico, za = Nam Phi...)
 const matchesData = [
   {
     date: "12/06/2026",
@@ -768,7 +767,6 @@ matchesData.forEach((m) => {
   if (!("score" in m)) m.score = null;
 });
 
-// ================== CODE CHÍNH ==================
 const matchListContainer = document.getElementById("match-list");
 const searchInput = document.getElementById("search-input");
 const groupSelect = document.getElementById("group-select");
@@ -938,7 +936,6 @@ function toggleFavoriteFromModal(id) {
   modal.style.display = "none";
 }
 
-// Events
 dateButtons.forEach((btn) =>
   btn.addEventListener("click", () => {
     dateButtons.forEach((b) => b.classList.remove("active"));
@@ -965,9 +962,6 @@ closeModal.addEventListener("click", () => (modal.style.display = "none"));
 modal.addEventListener("click", (e) => {
   if (e.target === modal) modal.style.display = "none";
 });
-
-// Tự cập nhật trạng thái trận đấu mỗi phút
 setInterval(filterMatches, 60_000);
 
-// Khởi chạy
 filterMatches();

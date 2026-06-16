@@ -195,15 +195,6 @@ header {
   font-weight: 700;
 }
 
-.match-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  margin-top: 16px;
-  color: #64748b;
-}
-
 .match-venue {
   font-size: 0.95rem;
   opacity: 0.9;
