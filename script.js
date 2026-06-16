@@ -152,6 +152,7 @@ const matchesData = [
     code2: "eg",
     time: "02:00",
     venue: "Lumen Field, Seattle",
+    score: "1-1",
   },
   {
     date: "16/06/2026",
@@ -162,6 +163,7 @@ const matchesData = [
     code2: "uy",
     time: "05:00",
     venue: "Hard Rock Stadium, Miami",
+    score: "1-1",
   },
   {
     date: "16/06/2026",
@@ -172,6 +174,7 @@ const matchesData = [
     code2: "nz",
     time: "08:00",
     venue: "SoFi Stadium, Los Angeles",
+    score: "2-2",
   },
   {
     date: "17/06/2026",
