@@ -184,6 +184,7 @@ const matchesData = [
     code2: "sn",
     time: "02:00",
     venue: "MetLife Stadium",
+    score: "3-1",
   },
   {
     date: "17/06/2026",
@@ -194,6 +195,7 @@ const matchesData = [
     code2: "no",
     time: "05:00",
     venue: "Gillette Stadium",
+    score: "1-4",
   },
   {
     date: "17/06/2026",
