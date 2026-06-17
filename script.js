@@ -206,6 +206,7 @@ const matchesData = [
     code2: "dz",
     time: "08:00",
     venue: "Arrowhead Stadium, Kansas City",
+    score: "3-0",
   },
   {
     date: "17/06/2026",
@@ -216,6 +217,7 @@ const matchesData = [
     code2: "jo",
     time: "11:00",
     venue: "Địa điểm chưa xác định",
+    score: "1-1",
   },
   {
     date: "18/06/2026",
