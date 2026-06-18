@@ -228,6 +228,7 @@ const matchesData = [
     code2: "cd",
     time: "00:00",
     venue: "NRG Stadium",
+    score: "1-1",
   },
   {
     date: "18/06/2026",
@@ -238,6 +239,7 @@ const matchesData = [
     code2: "hr",
     time: "03:00",
     venue: "Địa điểm chưa xác định",
+    score: "2-1",
   },
   {
     date: "18/06/2026",
@@ -248,6 +250,7 @@ const matchesData = [
     code2: "pa",
     time: "06:00",
     venue: "BMO Field",
+    score: "1-0",
   },
   {
     date: "18/06/2026",
@@ -258,6 +261,7 @@ const matchesData = [
     code2: "co",
     time: "09:00",
     venue: "Estadio Azteca, Mexico City",
+    score: "1-3",
   },
   {
     date: "18/06/2026",
