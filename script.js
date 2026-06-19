@@ -272,6 +272,7 @@ const matchesData = [
     code2: "za",
     time: "23:00",
     venue: "Mercedes-Benz Stadium",
+    score: "1-1",
   },
   {
     date: "19/06/2026",
@@ -282,6 +283,7 @@ const matchesData = [
     code2: "ba",
     time: "02:00",
     venue: "SoFi Stadium",
+    score: "4-1",
   },
   {
     date: "19/06/2026",
@@ -292,6 +294,7 @@ const matchesData = [
     code2: "qa",
     time: "05:00",
     venue: "BC Place",
+    score: "6-0",
   },
   {
     date: "19/06/2026",
