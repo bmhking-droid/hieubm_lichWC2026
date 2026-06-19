@@ -305,6 +305,7 @@ const matchesData = [
     code2: "kr",
     time: "08:00",
     venue: "Estadio Akron, Zapopan",
+    score: "1-0",
   },
   {
     date: "20/06/2026",
