@@ -349,6 +349,7 @@ const matchesData = [
     code2: "py",
     time: "10:00",
     venue: "Địa điểm chưa xác định",
+    score: "0-1",
   },
   {
     date: "21/06/2026",
