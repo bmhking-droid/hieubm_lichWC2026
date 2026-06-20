@@ -316,6 +316,7 @@ const matchesData = [
     code2: "au",
     time: "02:00",
     venue: "Lumen Field",
+    score: "2-0",
   },
   {
     date: "20/06/2026",
@@ -326,6 +327,7 @@ const matchesData = [
     code2: "ma",
     time: "05:00",
     venue: "Gillette Stadium",
+    score: "0-1",
   },
   {
     date: "20/06/2026",
@@ -336,6 +338,7 @@ const matchesData = [
     code2: "ht",
     time: "07:30",
     venue: "Lincoln Financial Field",
+    score: "3-0",
   },
   {
     date: "20/06/2026",
