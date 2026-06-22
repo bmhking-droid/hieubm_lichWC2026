@@ -448,6 +448,7 @@ const matchesData = [
     code2: "at",
     time: "00:00",
     venue: "Địa điểm chưa xác định",
+    score: "2-0",
   },
   {
     date: "23/06/2026",
