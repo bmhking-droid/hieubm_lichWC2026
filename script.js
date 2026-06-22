@@ -360,6 +360,7 @@ const matchesData = [
     code2: "se",
     time: "00:00",
     venue: "NRG Stadium",
+    score: "5-1",
   },
   {
     date: "21/06/2026",
@@ -370,6 +371,7 @@ const matchesData = [
     code2: "ci",
     time: "03:00",
     venue: "BMO Field",
+    score: "2-1",
   },
   {
     date: "21/06/2026",
@@ -380,6 +382,7 @@ const matchesData = [
     code2: "cw",
     time: "07:00",
     venue: "Arrowhead Stadium",
+    score: "0-0",
   },
   {
     date: "21/06/2026",
@@ -390,6 +393,7 @@ const matchesData = [
     code2: "jp",
     time: "11:00",
     venue: "Estadio BBVA, Monterrey",
+    score: "0-4",
   },
   {
     date: "21/06/2026",
@@ -400,6 +404,7 @@ const matchesData = [
     code2: "sa",
     time: "23:00",
     venue: "Mercedes-Benz Stadium",
+    score: "4-0",
   },
   {
     date: "22/06/2026",
@@ -410,6 +415,7 @@ const matchesData = [
     code2: "ir",
     time: "02:00",
     venue: "SoFi Stadium",
+    score: "0-0",
   },
   {
     date: "22/06/2026",
@@ -420,6 +426,7 @@ const matchesData = [
     code2: "cv",
     time: "05:00",
     venue: "Hard Rock Stadium",
+    score: "2-2",
   },
   {
     date: "22/06/2026",
@@ -430,6 +437,7 @@ const matchesData = [
     code2: "eg",
     time: "08:00",
     venue: "BC Place",
+    score: "1-3",
   },
   {
     date: "23/06/2026",
