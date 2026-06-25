@@ -580,6 +580,7 @@ const matchesData = [
     code2: "mx",
     time: "08:00",
     venue: "Estadio Azteca, Mexico City",
+    score: "0-3",
   },
   {
     date: "25/06/2026",
@@ -590,6 +591,7 @@ const matchesData = [
     code2: "kr",
     time: "08:00",
     venue: "Estadio BBVA, Monterrey",
+    score: "1-0",
   },
   {
     date: "26/06/2026",
