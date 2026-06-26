@@ -602,6 +602,7 @@ const matchesData = [
     code2: "ci",
     time: "03:00",
     venue: "Lincoln Financial Field",
+    score: "0-2",
   },
   {
     date: "26/06/2026",
@@ -612,6 +613,7 @@ const matchesData = [
     code2: "de",
     time: "03:00",
     venue: "MetLife Stadium",
+    score: "2-1",
   },
   {
     date: "26/06/2026",
@@ -622,6 +624,7 @@ const matchesData = [
     code2: "se",
     time: "06:00",
     venue: "Địa điểm chưa xác định",
+    score: "1-1",
   },
   {
     date: "26/06/2026",
@@ -632,6 +635,7 @@ const matchesData = [
     code2: "nl",
     time: "06:00",
     venue: "Arrowhead Stadium",
+    score: "1-3",
   },
   {
     date: "26/06/2026",
@@ -642,6 +646,7 @@ const matchesData = [
     code2: "au",
     time: "09:00",
     venue: "Địa điểm chưa xác định",
+    score: "0-0",
   },
   {
     date: "26/06/2026",
@@ -652,6 +657,7 @@ const matchesData = [
     code2: "us",
     time: "09:00",
     venue: "SoFi Stadium",
+    score: "3-2",
   },
   {
     date: "27/06/2026",
