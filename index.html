@@ -3,77 +3,81 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Lịch Thi Đấu World Cup 2026</title>
+    <title>Lịch Thi Đấu World Cup 2026 - Knockout</title>
     <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     />
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <header>
-      <div class="header-content">
-        <h1>LỊCH THI ĐẤU WORLD CUP 2026</h1>
-        <p>Lịch thi đấu vòng bảng</p>
-      </div>
-    </header>
+    <div class="container">
+      <header>
+        <div class="header-content">
+          <div class="logo">
+            <span class="trophy">🏆</span>
+            <div>
+              <h1>World Cup 2026</h1>
+              <p class="subtitle">Vòng Knockout</p>
+            </div>
+          </div>
 
-    <main class="container">
-      <!-- Tabs -->
-      <div class="tabs">
-        <button class="tab-btn active" data-tab="all">Tất cả trận</button>
-        <button class="tab-btn" data-tab="upcoming">Sắp diễn ra</button>
-        <button class="tab-btn" data-tab="finished">Kết quả</button>
-        <button class="tab-btn" data-tab="favorites">⭐ Yêu thích</button>
-      </div>
+          <div class="controls">
+            <div class="search-box">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input
+                id="searchInput"
+                type="text"
+                placeholder="Tìm đội tuyển..."
+                onkeyup="filterMatches()"
+              />
+            </div>
 
-      <div class="filter-wrapper">
-        <div class="filter-controls">
-          <input
-            type="text"
-            id="search-input"
-            placeholder="Tìm kiếm quốc gia..."
-          />
+            <div class="date-filter">
+              <i class="fa-solid fa-calendar"></i>
+              <select id="dateFilter" onchange="filterMatches()">
+                <option value="">Tất cả ngày</option>
+              </select>
+            </div>
 
-          <select id="group-select">
-            <option value="all">Tất cả bảng</option>
-            <option value="A">Bảng A</option>
-            <option value="B">Bảng B</option>
-            <option value="C">Bảng C</option>
-            <option value="D">Bảng D</option>
-            <option value="E">Bảng E</option>
-            <option value="F">Bảng F</option>
-            <option value="G">Bảng G</option>
-            <option value="H">Bảng H</option>
-            <option value="I">Bảng I</option>
-            <option value="J">Bảng J (Messi)</option>
-            <option value="K">Bảng K (Ronaldo)</option>
-            <option value="L">Bảng L</option>
-          </select>
-
-          <select id="sort-select">
-            <option value="time">Theo thời gian</option>
-            <option value="group">Theo bảng đấu</option>
-            <option value="team">Tên đội A-Z</option>
-          </select>
+            <button onclick="showFavorites()" class="fav-btn">
+              <i class="fa-solid fa-heart"></i>
+              <span id="favCount">0</span>
+            </button>
+          </div>
         </div>
 
-        <div class="date-filters">
-          <button class="date-btn active" data-date="all">Tất cả</button>
-          <button class="date-btn" data-date="today">Hôm nay</button>
-          <button class="date-btn" data-date="tomorrow">Ngày mai</button>
+        <div id="tabs" class="tabs"></div>
+      </header>
+
+      <main>
+        <div id="matchesContainer" class="matches-grid"></div>
+      </main>
+    </div>
+
+    <div id="modal" class="modal" onclick="closeModal()">
+      <div class="modal-content" onclick="event.stopPropagation()">
+        <div class="modal-header">
+          <div id="modalMatchInfo" class="modal-match-info"></div>
+          <button onclick="closeModal()" class="close-btn">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
         </div>
+        <div class="modal-body">
+          <div id="modalTeams" class="modal-teams"></div>
+          <div class="modal-info">
+            <div id="modalTime" class="modal-time"></div>
+            <div id="modalDate" class="modal-date"></div>
+            <div id="modalVenue" class="modal-venue"></div>
+          </div>
+        </div>
+        <div class="modal-footer"></div>
       </div>
+    </div>
 
-      <div id="match-list" class="match-grid"></div>
-    </main>
-
-    <!-- Modal -->
-    <div id="match-modal" class="modal">
-      <div class="modal-content">
-        <span class="close-modal">×</span>
-        <div id="modal-body"></div>
-      </div>
+    <div id="toast" class="toast">
+      <i class="fa-solid fa-circle-check"></i>
+      <span id="toastText"></span>
     </div>
 
     <script src="script.js"></script>
