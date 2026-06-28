@@ -668,6 +668,7 @@ const matchesData = [
     code2: "fr",
     time: "02:00",
     venue: "Gillette Stadium",
+    score: "1-4",
   },
   {
     date: "27/06/2026",
@@ -678,6 +679,7 @@ const matchesData = [
     code2: "iq",
     time: "02:00",
     venue: "BMO Field",
+    score: "5-0",
   },
   {
     date: "27/06/2026",
@@ -688,6 +690,7 @@ const matchesData = [
     code2: "sa",
     time: "07:00",
     venue: "NRG Stadium",
+    score: "0-0",
   },
   {
     date: "27/06/2026",
@@ -698,6 +701,7 @@ const matchesData = [
     code2: "es",
     time: "07:00",
     venue: "Estadio Akron, Zapopan",
+    score: "0-1",
   },
   {
     date: "27/06/2026",
@@ -708,6 +712,7 @@ const matchesData = [
     code2: "ir",
     time: "10:00",
     venue: "Lumen Field",
+    score: "1-1",
   },
   {
     date: "27/06/2026",
@@ -718,6 +723,7 @@ const matchesData = [
     code2: "be",
     time: "10:00",
     venue: "BC Place",
+    score: "1-5",
   },
   {
     date: "28/06/2026",
@@ -728,6 +734,7 @@ const matchesData = [
     code2: "gh",
     time: "04:00",
     venue: "Lincoln Financial Field",
+    score: "2-1",
   },
   {
     date: "28/06/2026",
@@ -738,6 +745,7 @@ const matchesData = [
     code2: "gb-eng",
     time: "04:00",
     venue: "MetLife Stadium",
+    score: "0-2",
   },
   {
     date: "28/06/2026",
@@ -748,6 +756,7 @@ const matchesData = [
     code2: "pt",
     time: "06:30",
     venue: "Hard Rock Stadium",
+    score: "0-0",
   },
   {
     date: "28/06/2026",
@@ -758,6 +767,7 @@ const matchesData = [
     code2: "uz",
     time: "06:30",
     venue: "Mercedes-Benz Stadium",
+    score: "3-1",
   },
   {
     date: "28/06/2026",
@@ -768,6 +778,7 @@ const matchesData = [
     code2: "at",
     time: "09:00",
     venue: "Arrowhead Stadium",
+    score: "3-3",
   },
   {
     date: "28/06/2026",
@@ -778,6 +789,7 @@ const matchesData = [
     code2: "ar",
     time: "09:00",
     venue: "Địa điểm chưa xác định",
+    score: "1-3",
   },
 ];
 
