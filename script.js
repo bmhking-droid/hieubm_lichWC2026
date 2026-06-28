@@ -10,7 +10,7 @@ const originalRounds = [
         team1: "Nam Phi",
         team2: "Canada",
         venue: "SoFi Stadium, Los Angeles",
-        status: "finished",
+        status: "scheduled",
       },
       {
         id: 74,
@@ -19,7 +19,7 @@ const originalRounds = [
         team1: "Brazil",
         team2: "Nhật Bản",
         venue: "NRG Stadium, Houston",
-        status: "live",
+        status: "scheduled",
       },
       {
         id: 75,
