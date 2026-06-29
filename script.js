@@ -406,12 +406,12 @@ function checkAdminPrivilege() {
   const badge = document.getElementById("roleBadge");
   if (badge) {
     if (isAdmin) {
-      badge.textContent = "CHẾ ĐỘ ADMIN";
+      badge.textContent = "ADMIN";
       badge.style.background = "#fee2e2";
       badge.style.color = "#dc2626";
       badge.style.display = "block";
     } else {
-      badge.textContent = "CHẾ ĐỘ XEM";
+      badge.textContent = "USER";
       badge.style.background = "#f1f5f9";
       badge.style.color = "#64748b";
       badge.style.display = "block";
@@ -633,7 +633,7 @@ function renderBracket() {
     <div class="bracket-wrapper">
       <div class="bracket-header-info">
         <h2><i class="fa-solid fa-sitemap"></i> SƠ ĐỒ THI ĐẤU KNOCKOUT</h2>
-        <p>${isAdmin ? "Bạn đang ở quyền ADMIN - Click trực tiếp vào các trận để sửa điểm số đám mây" : "Chế độ xem trực tuyến cập nhật từ Ban Tổ Chức"}</p>
+        <p>${isAdmin ? "Bạn đang ở quyền ADMIN - Click trực tiếp vào các trận để sửa điểm số đám mây" : "Chế độ xem trực tuyến"}</p>
       </div>
       <div class="bracket-grid">
         ${rounds
