@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/api/get-results", "destination": "/api/get-results.js" },
+    { "source": "/api/save-results", "destination": "/api/save-results.js" }
+  ]
+}

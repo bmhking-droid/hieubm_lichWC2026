@@ -10,7 +10,7 @@ const originalRounds = [
         team1: "Nam Phi",
         team2: "Canada",
         venue: "SoFi Stadium, Los Angeles",
-        status: "finished",
+        status: "scheduled",
       },
       {
         id: 74,
@@ -19,7 +19,7 @@ const originalRounds = [
         team1: "Brazil",
         team2: "Nhật Bản",
         venue: "NRG Stadium, Houston",
-        status: "live",
+        status: "scheduled",
       },
       {
         id: 75,
@@ -397,24 +397,25 @@ let favorites = JSON.parse(localStorage.getItem("wcFavorites")) || [];
 let matchResults = {};
 let currentTab = "round32";
 let currentModalMatch = null;
-let isAdmin = false; // Mặc định là khách truy cập thông thường
+let isAdmin = false;
 
-// Kiểm tra quyền Admin từ URL: ?role=admin
 function checkAdminPrivilege() {
   const urlParams = new URLSearchParams(window.location.search);
   isAdmin = urlParams.get("role") === "admin";
 
   const badge = document.getElementById("roleBadge");
-  if (isAdmin) {
-    badge.textContent = "CHẾ ĐỘ ADMIN";
-    badge.style.background = "#fee2e2";
-    badge.style.color = "#dc2626";
-    badge.style.display = "block";
-  } else {
-    badge.textContent = "CHẾ ĐỘ XEM";
-    badge.style.background = "#f1f5f9";
-    badge.style.color = "#64748b";
-    badge.style.display = "block";
+  if (badge) {
+    if (isAdmin) {
+      badge.textContent = "CHẾ ĐỘ ADMIN";
+      badge.style.background = "#fee2e2";
+      badge.style.color = "#dc2626";
+      badge.style.display = "block";
+    } else {
+      badge.textContent = "CHẾ ĐỘ XEM";
+      badge.style.background = "#f1f5f9";
+      badge.style.color = "#64748b";
+      badge.style.display = "block";
+    }
   }
 }
 
@@ -426,13 +427,15 @@ function getFlagUrl(country) {
 
 async function saveResultsToCloud() {
   try {
-    await fetch("/api/save-results", {
+    const res = await fetch("/api/save-results", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(matchResults),
     });
+    if (!res.ok) throw new Error("Server trả về lỗi khi ghi dữ liệu.");
   } catch (err) {
     console.error("Lỗi lưu trữ Cloud Database:", err);
+    showToast("❌ Không thể đồng bộ lên Cloud!");
   }
 }
 
@@ -482,12 +485,12 @@ function updateTree() {
   for (let r of rounds) {
     for (let m of r.matches) {
       const res = getResult(m.id);
+      if (res.score1 !== "" && res.score2 !== "") {
+        m.status = "finished";
+      }
       if (res.winner && nextMatchMap[m.id]) {
         const target = nextMatchMap[m.id];
         findAndSetTeam(target.nextId, res.winner, target.slot);
-      }
-      if (res.score1 !== "" && res.score2 !== "") {
-        m.status = "finished";
       }
     }
   }
@@ -502,6 +505,7 @@ function updateTree() {
 
 function renderTabs() {
   const container = document.getElementById("tabs");
+  if (!container) return;
   container.innerHTML = "";
   rounds.forEach((round) => {
     const tab = document.createElement("button");
@@ -556,13 +560,12 @@ function renderMatches() {
     return;
   }
   const container = document.getElementById("matchesContainer");
+  if (!container) return;
   container.innerHTML = "";
 
-  const searchTerm = document
-    .getElementById("searchInput")
-    .value.toLowerCase()
-    .trim();
-  const selectedDate = document.getElementById("dateFilter").value;
+  const searchTerm =
+    document.getElementById("searchInput")?.value.toLowerCase().trim() || "";
+  const selectedDate = document.getElementById("dateFilter")?.value || "";
   let matchesToShow = [];
 
   if (currentTab === "favorites") {
@@ -584,7 +587,7 @@ function renderMatches() {
   });
 
   if (filtered.length === 0) {
-    container.innerHTML = `<div class="no-matches" style="text-align:center; padding:40px; color:var(--text-muted);">Không tìm thấy trận đấu phù hợp.</div>`;
+    container.innerHTML = `<div class="no-matches" style="text-align:center; padding:40px; color:gray;">Không tìm thấy trận đấu phù hợp.</div>`;
     return;
   }
 
@@ -625,6 +628,7 @@ function renderMatches() {
 
 function renderBracket() {
   const container = document.getElementById("matchesContainer");
+  if (!container) return;
   container.innerHTML = `
     <div class="bracket-wrapper">
       <div class="bracket-header-info">
@@ -684,6 +688,7 @@ function showMatchModal(match) {
   }
   currentModalMatch = match;
   const modal = document.getElementById("modal");
+  if (!modal) return;
   modal.classList.add("active");
   const res = getResult(match.id);
 
@@ -716,9 +721,9 @@ function showMatchModal(match) {
   const infoContainer = document.getElementById("modalVenue").parentNode;
   let statusSelector = document.getElementById("modalStatusSelect");
   if (!statusSelector) {
-    statusSelector = document.createElement("div");
-    statusSelector.className = "status-select-container";
-    statusSelector.innerHTML = `
+    const newContainer = document.createElement("div");
+    newContainer.className = "status-select-container";
+    newContainer.innerHTML = `
       <label style="font-size:12px; font-weight:700; margin-right:8px;">Trạng thái:</label>
       <select id="modalStatusSelect" ${disabledAttr}>
         <option value="scheduled">Chưa diễn ra</option>
@@ -726,19 +731,21 @@ function showMatchModal(match) {
         <option value="finished">Kết thúc</option>
       </select>
     `;
-    infoContainer.appendChild(statusSelector);
+    infoContainer.appendChild(newContainer);
   }
   document.getElementById("modalStatusSelect").value = match.status;
 
   const footer = document.querySelector(".modal-footer");
-  if (isAdmin) {
-    footer.innerHTML = `
-      <button onclick="saveMatchResult()" class="btn-save">💾 Lưu lên Cloud</button>
-      <button onclick="resetMatchResult()" class="btn-reset">🔄 Xóa trận</button>
-      <button onclick="closeModal()" class="btn-close">Hủy</button>
-    `;
-  } else {
-    footer.innerHTML = `<button onclick="closeModal()" class="btn-close" style="width:100%">Đóng cửa sổ xem</button>`;
+  if (footer) {
+    if (isAdmin) {
+      footer.innerHTML = `
+        <button onclick="saveMatchResult()" class="btn-save">💾 Lưu lên Cloud</button>
+        <button onclick="resetMatchResult()" class="btn-reset">🔄 Xóa trận</button>
+        <button onclick="closeModal()" class="btn-close">Hủy</button>
+      `;
+    } else {
+      footer.innerHTML = `<button onclick="closeModal()" class="btn-close" style="width:100%">Đóng cửa sổ xem</button>`;
+    }
   }
 }
 
@@ -812,18 +819,22 @@ async function resetMatchResult() {
 }
 
 function closeModal() {
-  document.getElementById("modal").classList.remove("active");
+  document.getElementById("modal")?.classList.remove("active");
 }
 
 function showToast(message) {
   const toast = document.getElementById("toast");
-  document.getElementById("toastText").innerHTML = message;
-  toast.classList.add("active");
-  setTimeout(() => toast.classList.remove("active"), 3000);
+  const toastText = document.getElementById("toastText");
+  if (toast && toastText) {
+    toastText.innerHTML = message;
+    toast.classList.add("active");
+    setTimeout(() => toast.classList.remove("active"), 3000);
+  }
 }
 
 function populateDateFilter() {
   const select = document.getElementById("dateFilter");
+  if (!select) return;
   select.innerHTML = '<option value="">Tất cả ngày</option>';
   const dates = new Set();
   originalRounds.forEach((r) => r.matches.forEach((m) => dates.add(m.date)));
@@ -849,6 +860,8 @@ async function init() {
     const res = await fetch("/api/get-results");
     if (res.ok) {
       matchResults = await res.json();
+    } else {
+      console.warn("API KV trả về status không thành công, chạy offline.");
     }
   } catch (e) {
     console.error(
@@ -859,7 +872,8 @@ async function init() {
 
   updateTree();
   renderTabs();
-  document.getElementById("favCount").textContent = favorites.length;
+  const favCount = document.getElementById("favCount");
+  if (favCount) favCount.textContent = favorites.length;
   renderMatches();
 }
 
