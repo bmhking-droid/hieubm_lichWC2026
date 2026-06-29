@@ -10,7 +10,7 @@ const originalRounds = [
         team1: "Nam Phi",
         team2: "Canada",
         venue: "SoFi Stadium, Los Angeles",
-        status: "scheduled",
+        status: "finished",
       },
       {
         id: 74,
@@ -19,7 +19,7 @@ const originalRounds = [
         team1: "Brazil",
         team2: "Nhật Bản",
         venue: "NRG Stadium, Houston",
-        status: "scheduled",
+        status: "live",
       },
       {
         id: 75,
@@ -327,9 +327,7 @@ const originalRounds = [
 
 let rounds = JSON.parse(JSON.stringify(originalRounds));
 
-/* BẢN TÁCH NHÁNH ĐẤU CHÉO CHUẨN 100% THEO TƯ LIỆU ẢNH */
 const nextMatchMap = {
-  // --- VÒNG 1/16 LÊN VÒNG 1/8 ---
   73: { nextId: 89, slot: "team1" },
   75: { nextId: 89, slot: "team2" },
   74: { nextId: 90, slot: "team1" },
@@ -346,8 +344,6 @@ const nextMatchMap = {
   88: { nextId: 95, slot: "team2" },
   85: { nextId: 96, slot: "team1" },
   87: { nextId: 96, slot: "team2" },
-
-  // --- VÒNG 1/8 LÊN TỨ KẾT ---
   89: { nextId: 97, slot: "team1" },
   90: { nextId: 97, slot: "team2" },
   93: { nextId: 98, slot: "team1" },
@@ -356,8 +352,6 @@ const nextMatchMap = {
   92: { nextId: 99, slot: "team2" },
   95: { nextId: 100, slot: "team1" },
   96: { nextId: 100, slot: "team2" },
-
-  // --- TỨ KẾT LÊN BÁN KẾT ---
   97: { nextId: 101, slot: "team1" },
   98: { nextId: 101, slot: "team2" },
   99: { nextId: 102, slot: "team1" },
@@ -400,20 +394,46 @@ const flagMap = {
 };
 
 let favorites = JSON.parse(localStorage.getItem("wcFavorites")) || [];
-let matchResults = JSON.parse(localStorage.getItem("wcMatchResults")) || {};
+let matchResults = {};
 let currentTab = "round32";
 let currentModalMatch = null;
+let isAdmin = false; // Mặc định là khách truy cập thông thường
+
+// Kiểm tra quyền Admin từ URL: ?role=admin
+function checkAdminPrivilege() {
+  const urlParams = new URLSearchParams(window.location.search);
+  isAdmin = urlParams.get("role") === "admin";
+
+  const badge = document.getElementById("roleBadge");
+  if (isAdmin) {
+    badge.textContent = "CHẾ ĐỘ ADMIN";
+    badge.style.background = "#fee2e2";
+    badge.style.color = "#dc2626";
+    badge.style.display = "block";
+  } else {
+    badge.textContent = "CHẾ ĐỘ XEM";
+    badge.style.background = "#f1f5f9";
+    badge.style.color = "#64748b";
+    badge.style.display = "block";
+  }
+}
 
 function getFlagUrl(country) {
   if (!country)
     return "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='16'><rect width='24' height='16' fill='%23f1f5f9'/><text x='50%' y='65%' font-size='10' font-family='sans-serif' fill='%2394a3b8' text-anchor='middle'>?</text></svg>";
-  const code = flagMap[country] || "xx";
-  return `https://flagcdn.com/w160/${code}.png`;
+  return `https://flagcdn.com/w160/${flagMap[country] || "xx"}.png`;
 }
 
-function saveData() {
-  localStorage.setItem("wcFavorites", JSON.stringify(favorites));
-  localStorage.setItem("wcMatchResults", JSON.stringify(matchResults));
+async function saveResultsToCloud() {
+  try {
+    await fetch("/api/save-results", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(matchResults),
+    });
+  } catch (err) {
+    console.error("Lỗi lưu trữ Cloud Database:", err);
+  }
 }
 
 function getResult(matchId) {
@@ -432,9 +452,9 @@ function getStatusBadge(status) {
     case "finished":
       return `<span class="badge badge-finished">Kết thúc</span>`;
     case "live":
-      return `<span class="badge badge-live"><span class="dot"></span>Đang diễn ra</span>`;
+      return `<span class="badge badge-live"><span class="dot"></span>Đang live</span>`;
     default:
-      return `<span class="badge badge-scheduled">Chưa diễn ra</span>`;
+      return `<span class="badge badge-scheduled">Chưa đá</span>`;
   }
 }
 
@@ -513,7 +533,7 @@ function toggleFavorite(matchId, e) {
   } else {
     favorites.push(matchId);
   }
-  saveData();
+  localStorage.setItem("wcFavorites", JSON.stringify(favorites));
   document.getElementById("favCount").textContent = favorites.length;
   if (currentTab === "favorites") renderMatches();
   else {
@@ -608,7 +628,8 @@ function renderBracket() {
   container.innerHTML = `
     <div class="bracket-wrapper">
       <div class="bracket-header-info">
-        <h2><i class="fa-solid fa-sitemap"></i> SƠ ĐỒ THI ĐẤU KNOCKOUT</h2>   
+        <h2><i class="fa-solid fa-sitemap"></i> SƠ ĐỒ THI ĐẤU KNOCKOUT</h2>
+        <p>${isAdmin ? "Bạn đang ở quyền ADMIN - Click trực tiếp vào các trận để sửa điểm số đám mây" : "Chế độ xem trực tuyến cập nhật từ Ban Tổ Chức"}</p>
       </div>
       <div class="bracket-grid">
         ${rounds
@@ -658,7 +679,7 @@ function renderBracket() {
 
 function showMatchModal(match) {
   if (!match.team1 || !match.team2) {
-    alert("Vui lòng chờ hoặc cập nhật kết quả các vòng trước để xác định đội!");
+    alert("Trận đấu này chưa xác định xong các đội tuyển!");
     return;
   }
   currentModalMatch = match;
@@ -671,17 +692,20 @@ function showMatchModal(match) {
     <span class="modal-round-tag">${rounds.find((r) => r.matches.some((m) => m.id === match.id))?.name}</span>
   `;
 
+  const inputClass = isAdmin ? "score-input" : "score-input score-readonly";
+  const disabledAttr = isAdmin ? "" : "disabled";
+
   document.getElementById("modalTeams").innerHTML = `
     <div class="team-block">
       <img src="${getFlagUrl(match.team1)}" alt="">
       <div class="modal-team-name">${match.team1}</div>
-      <input type="number" id="score1" class="score-input" value="${res.score1}" min="0">
+      <input type="number" id="score1" class="${inputClass}" value="${res.score1}" min="0" ${disabledAttr}>
     </div>
     <div class="vs-big">VS</div>
     <div class="team-block">
       <img src="${getFlagUrl(match.team2)}" alt="">
       <div class="modal-team-name">${match.team2}</div>
-      <input type="number" id="score2" class="score-input" value="${res.score2}" min="0">
+      <input type="number" id="score2" class="${inputClass}" value="${res.score2}" min="0" ${disabledAttr}>
     </div>
   `;
 
@@ -696,7 +720,7 @@ function showMatchModal(match) {
     statusSelector.className = "status-select-container";
     statusSelector.innerHTML = `
       <label style="font-size:12px; font-weight:700; margin-right:8px;">Trạng thái:</label>
-      <select id="modalStatusSelect">
+      <select id="modalStatusSelect" ${disabledAttr}>
         <option value="scheduled">Chưa diễn ra</option>
         <option value="live">Đang diễn ra</option>
         <option value="finished">Kết thúc</option>
@@ -707,11 +731,15 @@ function showMatchModal(match) {
   document.getElementById("modalStatusSelect").value = match.status;
 
   const footer = document.querySelector(".modal-footer");
-  footer.innerHTML = `
-    <button onclick="saveMatchResult()" class="btn-save">💾 Lưu kết quả</button>
-    <button onclick="resetMatchResult()" class="btn-reset">🔄 Đặt lại</button>
-    <button onclick="closeModal()" class="btn-close">Đóng</button>
-  `;
+  if (isAdmin) {
+    footer.innerHTML = `
+      <button onclick="saveMatchResult()" class="btn-save">💾 Lưu lên Cloud</button>
+      <button onclick="resetMatchResult()" class="btn-reset">🔄 Xóa trận</button>
+      <button onclick="closeModal()" class="btn-close">Hủy</button>
+    `;
+  } else {
+    footer.innerHTML = `<button onclick="closeModal()" class="btn-close" style="width:100%">Đóng cửa sổ xem</button>`;
+  }
 }
 
 function showMatchModalFromId(id) {
@@ -720,19 +748,19 @@ function showMatchModalFromId(id) {
   if (match) showMatchModal(match);
 }
 
-function saveMatchResult() {
-  if (!currentModalMatch) return;
+async function saveMatchResult() {
+  if (!isAdmin || !currentModalMatch) return;
   const s1 = document.getElementById("score1").value;
   const s2 = document.getElementById("score2").value;
   const selectedStatus = document.getElementById("modalStatusSelect").value;
 
   if (selectedStatus === "finished" && (s1 === "" || s2 === "")) {
-    alert("Vui lòng nhập đầy đủ tỉ số trước khi lưu trạng thái kết thúc!");
+    alert("Ban tổ chức vui lòng nhập đầy đủ tỷ số!");
     return;
   }
   if (selectedStatus === "finished" && parseInt(s1) === parseInt(s2)) {
     alert(
-      "Vòng Knockout loại trực tiếp không có kết quả hòa! Hãy tính cả điểm penalty.",
+      "Trận Knockout bắt buộc phải tính cả luân lưu penalty để tìm đội đi tiếp!",
     );
     return;
   }
@@ -751,23 +779,35 @@ function saveMatchResult() {
   };
   currentModalMatch.status = selectedStatus;
 
-  saveData();
   updateTree();
-  showToast("✅ Đã cập nhật tỉ số & đẩy đội thắng lên nhánh tiếp theo!");
   closeModal();
+  showToast("🔄 Đang đồng bộ hóa kết quả lên Cloud KV...");
+
+  await saveResultsToCloud();
+
+  showToast("✅ Đã lưu thành công! Tất cả mọi người sẽ thấy kết quả này.");
   currentTab === "bracket" ? renderBracket() : renderMatches();
 }
 
-function resetMatchResult() {
-  if (!currentModalMatch || !confirm("Bạn muốn reset kết quả trận đấu này?"))
+async function resetMatchResult() {
+  if (
+    !isAdmin ||
+    !currentModalMatch ||
+    !confirm(
+      "Bạn có chắc chắn muốn hủy kết quả trận đấu này trên Database đám mây?",
+    )
+  )
     return;
   delete matchResults[currentModalMatch.id];
   currentModalMatch.status = "scheduled";
 
-  saveData();
   updateTree();
-  showToast("🗑️ Đã hoàn tác trận đấu về mặc định.");
   closeModal();
+  showToast("🔄 Đang xóa dữ liệu trên đám mây...");
+
+  await saveResultsToCloud();
+
+  showToast("🗑️ Đã hoàn tác kết quả về mặc định thành công.");
   currentTab === "bracket" ? renderBracket() : renderMatches();
 }
 
@@ -779,7 +819,7 @@ function showToast(message) {
   const toast = document.getElementById("toast");
   document.getElementById("toastText").innerHTML = message;
   toast.classList.add("active");
-  setTimeout(() => toast.classList.remove("active"), 2500);
+  setTimeout(() => toast.classList.remove("active"), 3000);
 }
 
 function populateDateFilter() {
@@ -801,8 +841,22 @@ function filterMatches() {
   renderMatches();
 }
 
-function init() {
+async function init() {
+  checkAdminPrivilege();
   populateDateFilter();
+
+  try {
+    const res = await fetch("/api/get-results");
+    if (res.ok) {
+      matchResults = await res.json();
+    }
+  } catch (e) {
+    console.error(
+      "Không kết nối được Cloud, chạy trên dữ liệu rỗng offline.",
+      e,
+    );
+  }
+
   updateTree();
   renderTabs();
   document.getElementById("favCount").textContent = favorites.length;

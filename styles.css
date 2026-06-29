@@ -1,7 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap");
 
 :root {
-  /* Bảng màu Modern Sports Light Luxury */
   --bg-primary: #f4f6f9;
   --bg-secondary: #ffffff;
   --bg-tertiary: #f8fafc;
@@ -12,7 +11,6 @@
   --text-muted: #64748b;
   --border-color: #e2e8f0;
 
-  /* Trạng thái sinh động */
   --color-scheduled: #64748b;
   --bg-scheduled: #f1f5f9;
   --color-live: #dc2626;
@@ -52,7 +50,6 @@ body {
   padding: 0 24px;
 }
 
-/* Header vùng điều khiển cố định */
 header {
   background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(12px);
@@ -78,13 +75,11 @@ header {
   align-items: center;
   gap: 12px;
 }
-
 .trophy {
   font-size: 34px;
   filter: drop-shadow(0 2px 8px rgba(234, 179, 8, 0.3));
   animation: float 3s ease-in-out infinite;
 }
-
 @keyframes float {
   0%,
   100% {
@@ -94,14 +89,12 @@ header {
     transform: translateY(-5px);
   }
 }
-
 .logo h1 {
   font-size: 24px;
   font-weight: 800;
   color: var(--text-main);
   letter-spacing: -0.5px;
 }
-
 .subtitle {
   color: var(--accent);
   font-size: 11px;
@@ -110,14 +103,12 @@ header {
   letter-spacing: 1.5px;
 }
 
-/* Controls ô nhập liệu */
 .controls {
   display: flex;
   align-items: center;
   gap: 12px;
   flex-wrap: wrap;
 }
-
 .search-box,
 .date-filter {
   background: var(--bg-secondary);
@@ -131,13 +122,11 @@ header {
   transition: var(--transition);
   box-shadow: var(--shadow-sm);
 }
-
 .search-box:focus-within,
 .date-filter:focus-within {
   border-color: var(--accent);
   box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.12);
 }
-
 .search-box input,
 .date-filter select {
   background: none;
@@ -162,14 +151,12 @@ header {
   font-size: 14px;
   transition: var(--transition);
 }
-
 .fav-btn:hover {
   background: #ef4444;
   color: white;
   border-color: #ef4444;
 }
 
-/* Thanh điều hướng Tabs */
 .tabs {
   display: flex;
   overflow-x: auto;
@@ -178,7 +165,6 @@ header {
 .tabs::-webkit-scrollbar {
   height: 0px;
 }
-
 .tab {
   padding: 14px 20px;
   white-space: nowrap;
@@ -192,18 +178,15 @@ header {
   transition: var(--transition);
   text-transform: uppercase;
 }
-
 .tab:hover {
   color: var(--text-main);
   background: #f1f5f9;
 }
-
 .tab-active {
   color: var(--accent);
   border-bottom-color: var(--accent);
 }
 
-/* Định dạng Badge trạng thái */
 .badge {
   font-size: 11px;
   font-weight: 700;
@@ -226,7 +209,6 @@ header {
   color: var(--color-finished);
   background: var(--bg-finished);
 }
-
 .dot {
   width: 6px;
   height: 6px;
@@ -244,15 +226,12 @@ header {
   }
 }
 
-/* Grid Trận đấu thường */
 .matches-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
   gap: 20px;
   padding: 32px 0;
 }
-
-/* Hủy grid ép tràn trang khi xem sơ đồ cây */
 .container:has(.bracket-wrapper) .matches-grid {
   display: block;
   padding: 0;
@@ -267,20 +246,17 @@ header {
   transition: var(--transition);
   box-shadow: var(--shadow-sm);
 }
-
 .match-card:hover {
   transform: translateY(-2px);
   border-color: var(--accent);
   box-shadow: var(--shadow-lg);
 }
-
 .match-card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 14px;
 }
-
 .match-id {
   background: var(--bg-primary);
   padding: 2px 6px;
@@ -289,7 +265,6 @@ header {
   font-weight: 700;
   color: var(--text-muted);
 }
-
 .fav-icon {
   background: none;
   border: none;
@@ -297,9 +272,6 @@ header {
   cursor: pointer;
   font-size: 15px;
   transition: var(--transition);
-}
-.fav-icon:hover {
-  transform: scale(1.15);
 }
 .fav-icon.active {
   color: #ef4444;
@@ -310,7 +282,6 @@ header {
   align-items: center;
   justify-content: space-between;
 }
-
 .team {
   display: flex;
   flex-direction: column;
@@ -318,7 +289,6 @@ header {
   gap: 8px;
   flex: 1;
 }
-
 .team img {
   width: 44px;
   height: 28px;
@@ -327,19 +297,16 @@ header {
   border: 1px solid var(--border-color);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
 }
-
 .team span {
   font-size: 13px;
   font-weight: 600;
   color: var(--text-main);
   text-align: center;
 }
-
 .team.winner span {
   color: var(--color-finished);
   font-weight: 700;
 }
-
 .vs-container {
   text-align: center;
   min-width: 80px;
@@ -368,7 +335,6 @@ header {
   color: var(--accent);
   margin-top: 2px;
 }
-
 .venue {
   font-size: 12px;
   color: var(--text-muted);
@@ -378,9 +344,6 @@ header {
   margin-top: 14px;
 }
 
-/* ==========================================================================
-   SƠ ĐỒ CÂY THI ĐẤU TOÀN MÀN HÌNH MÀU SÁNG CAO CẤP
-   ========================================================================== */
 .bracket-wrapper {
   background: var(--bg-secondary);
   padding: 36px 24px;
@@ -388,8 +351,6 @@ header {
   border: 1px solid var(--border-color);
   margin: 32px 0;
   box-shadow: var(--shadow-md);
-
-  /* Cơ chế căng rộng tràn viền màn hình */
   width: calc(100vw - 48px);
   position: relative;
   left: 50%;
@@ -397,7 +358,6 @@ header {
   overflow-x: auto;
   scroll-behavior: smooth;
 }
-
 .bracket-header-info {
   text-align: center;
   margin-bottom: 36px;
@@ -412,21 +372,18 @@ header {
   font-size: 13px;
   color: var(--text-muted);
 }
-
 .bracket-grid {
   display: flex;
   gap: 36px;
   padding: 10px;
   min-width: 1750px;
 }
-
 .bracket-column {
   flex: 1;
   min-width: 270px;
   display: flex;
   flex-direction: column;
 }
-
 .column-title {
   text-align: center;
   font-size: 12px;
@@ -440,7 +397,6 @@ header {
   margin-bottom: 20px;
   border: 1px solid rgba(2, 132, 199, 0.1);
 }
-
 .bracket-list {
   display: flex;
   flex-direction: column;
@@ -449,7 +405,6 @@ header {
   gap: 20px;
 }
 
-/* Node sơ đồ thiết kế dạng nổi (Card Pop-up) */
 .bracket-match-node {
   background: var(--bg-secondary);
   border: 1px solid var(--border-color);
@@ -459,13 +414,11 @@ header {
   transition: var(--transition);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
 }
-
 .bracket-match-node:hover {
   border-color: var(--accent);
   transform: translateY(-2px);
   box-shadow: var(--shadow-lg);
 }
-
 .node-header {
   background: var(--bg-tertiary);
   padding: 6px 12px;
@@ -479,11 +432,9 @@ header {
   font-weight: 700;
   color: var(--text-muted);
 }
-
 .node-body {
   padding: 4px 0;
 }
-
 .node-team {
   display: flex;
   align-items: center;
@@ -494,7 +445,6 @@ header {
 .node-team:not(:last-child) {
   border-bottom: 1px solid #f1f5f9;
 }
-
 .node-team-info {
   display: flex;
   align-items: center;
@@ -507,7 +457,6 @@ header {
   border-radius: 2px;
   border: 1px solid var(--border-color);
 }
-
 .team-name {
   font-weight: 600;
   color: var(--text-main);
@@ -516,13 +465,11 @@ header {
   color: var(--color-finished);
   font-weight: 700;
 }
-/* SỬA LỖI: Cập nhật màu nền điểm số hợp lệ cho đội chiến thắng */
 .node-team.winner .team-score {
   color: var(--color-finished);
   font-weight: 700;
   background: var(--bg-finished);
 }
-
 .node-team.empty {
   opacity: 0.45;
 }
@@ -530,7 +477,6 @@ header {
   font-style: italic;
   font-weight: 400;
 }
-
 .team-score {
   font-weight: 700;
   background: var(--bg-tertiary);
@@ -541,7 +487,6 @@ header {
   text-align: center;
 }
 
-/* Custom thanh cuộn ngang dải cây đấu */
 .bracket-wrapper::-webkit-scrollbar {
   height: 8px;
 }
@@ -557,7 +502,6 @@ header {
   background: #94a3b8;
 }
 
-/* Modal tinh chỉnh màu sáng */
 .modal {
   position: fixed;
   top: 0;
@@ -658,6 +602,12 @@ header {
   border-color: var(--accent);
   outline: none;
 }
+.score-readonly {
+  border: none;
+  background: transparent;
+  color: var(--accent);
+  pointer-events: none;
+}
 .vs-big {
   font-weight: 700;
   color: var(--text-muted);
@@ -718,7 +668,6 @@ header {
   color: var(--text-main);
 }
 
-/* Thông báo Toast */
 .toast {
   position: fixed;
   bottom: 24px;
