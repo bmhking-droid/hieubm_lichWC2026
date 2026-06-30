@@ -3,31 +3,32 @@ const originalRounds = [
     id: "round32",
     name: "VÒNG 1/16",
     matches: [
+      // ================= NHÁNH TRÁI (BÊN TRÊN) =================
       {
         id: 73,
-        date: "29/06",
-        time: "02:00",
-        team1: "Nam Phi",
-        team2: "Canada",
-        venue: "SoFi Stadium, Los Angeles",
-        status: "scheduled",
-      },
-      {
-        id: 74,
-        date: "30/06",
-        time: "00:00",
-        team1: "Brazil",
-        team2: "Nhật Bản",
-        venue: "NRG Stadium, Houston",
-        status: "scheduled",
-      },
-      {
-        id: 75,
         date: "30/06",
         time: "03:30",
         team1: "Đức",
         team2: "Paraguay",
         venue: "Gillette Stadium, Boston",
+        status: "scheduled",
+      },
+      {
+        id: 74,
+        date: "01/07",
+        time: "04:00",
+        team1: "Pháp",
+        team2: "Thụy Điển",
+        venue: "MetLife Stadium, New York",
+        status: "scheduled",
+      },
+      {
+        id: 75,
+        date: "29/06",
+        time: "02:00",
+        team1: "Nam Phi",
+        team2: "Canada",
+        venue: "SoFi Stadium, Los Angeles",
         status: "scheduled",
       },
       {
@@ -39,71 +40,9 @@ const originalRounds = [
         venue: "BBVA Stadium, Monterrey",
         status: "scheduled",
       },
+      // ================= NHÁNH TRÁI (BÊN DƯỚI) =================
       {
         id: 77,
-        date: "01/07",
-        time: "00:00",
-        team1: "Bờ Biển Ngà",
-        team2: "Na Uy",
-        venue: "AT&T Stadium, Dallas",
-        status: "scheduled",
-      },
-      {
-        id: 78,
-        date: "01/07",
-        time: "04:00",
-        team1: "Pháp",
-        team2: "Thụy Điển",
-        venue: "MetLife Stadium, New York",
-        status: "scheduled",
-      },
-      {
-        id: 79,
-        date: "01/07",
-        time: "08:00",
-        team1: "Mexico",
-        team2: "Ecuador",
-        venue: "Azteca Stadium, Mexico City",
-        status: "scheduled",
-      },
-      {
-        id: 80,
-        date: "01/07",
-        time: "23:00",
-        team1: "Anh",
-        team2: "CHDC Congo",
-        venue: "Mercedes-Benz Stadium, Atlanta",
-        status: "scheduled",
-      },
-      {
-        id: 81,
-        date: "02/07",
-        time: "03:00",
-        team1: "Bỉ",
-        team2: "Senegal",
-        venue: "Lumen Field, Seattle",
-        status: "scheduled",
-      },
-      {
-        id: 82,
-        date: "02/07",
-        time: "07:00",
-        team1: "Mỹ",
-        team2: "Bosnia và Herzegovina",
-        venue: "Levi's Stadium, San Francisco",
-        status: "scheduled",
-      },
-      {
-        id: 83,
-        date: "03/07",
-        time: "02:00",
-        team1: "Tây Ban Nha",
-        team2: "Áo",
-        venue: "SoFi Stadium, Los Angeles",
-        status: "scheduled",
-      },
-      {
-        id: 84,
         date: "03/07",
         time: "06:00",
         team1: "Bồ Đào Nha",
@@ -112,12 +51,77 @@ const originalRounds = [
         status: "scheduled",
       },
       {
-        id: 85,
+        id: 78,
         date: "03/07",
-        time: "10:00",
-        team1: "Thụy Sĩ",
-        team2: "Algeria",
-        venue: "BC Place, Vancouver",
+        time: "02:00",
+        team1: "Tây Ban Nha",
+        team2: "Áo",
+        venue: "SoFi Stadium, Los Angeles",
+        status: "scheduled",
+      },
+      {
+        id: 79,
+        date: "02/07",
+        time: "07:00",
+        team1: "Mỹ",
+        team2: "Bosnia và Herzegovina",
+        venue: "Levi's Stadium, San Francisco",
+        status: "scheduled",
+      },
+      {
+        id: 80,
+        date: "02/07",
+        time: "03:00",
+        team1: "Bỉ",
+        team2: "Senegal",
+        venue: "Lumen Field, Seattle",
+        status: "scheduled",
+      },
+      // ================= NHÁNH PHẢI (BÊN TRÊN) =================
+      {
+        id: 81,
+        date: "30/06",
+        time: "00:00",
+        team1: "Brazil",
+        team2: "Nhật Bản",
+        venue: "NRG Stadium, Houston",
+        status: "scheduled",
+      },
+      {
+        id: 82,
+        date: "01/07",
+        time: "00:00",
+        team1: "Bờ Biển Ngà",
+        team2: "Na Uy",
+        venue: "AT&T Stadium, Dallas",
+        status: "scheduled",
+      },
+      {
+        id: 83,
+        date: "01/07",
+        time: "08:00",
+        team1: "Mexico",
+        team2: "Ecuador",
+        venue: "Azteca Stadium, Mexico City",
+        status: "scheduled",
+      },
+      {
+        id: 84,
+        date: "01/07",
+        time: "23:00",
+        team1: "Anh",
+        team2: "CHDC Congo",
+        venue: "Mercedes-Benz Stadium, Atlanta",
+        status: "scheduled",
+      },
+      // ================= NHÁNH PHẢI (BÊN DƯỚI) =================
+      {
+        id: 85,
+        date: "04/07",
+        time: "05:00",
+        team1: "Argentina",
+        team2: "Cabo Verde",
+        venue: "Hard Rock Stadium, Miami",
         status: "scheduled",
       },
       {
@@ -131,11 +135,11 @@ const originalRounds = [
       },
       {
         id: 87,
-        date: "04/07",
-        time: "05:00",
-        team1: "Argentina",
-        team2: "Cabo Verde",
-        venue: "Hard Rock Stadium, Miami",
+        date: "03/07",
+        time: "10:00",
+        team1: "Thụy Sĩ",
+        team2: "Algeria",
+        venue: "BC Place, Vancouver",
         status: "scheduled",
       },
       {
@@ -325,25 +329,23 @@ const originalRounds = [
   },
 ];
 
-let rounds = JSON.parse(JSON.stringify(originalRounds));
-
 const nextMatchMap = {
   73: { nextId: 89, slot: "team1" },
-  75: { nextId: 89, slot: "team2" },
-  74: { nextId: 90, slot: "team1" },
-  77: { nextId: 90, slot: "team2" },
-  76: { nextId: 91, slot: "team1" },
+  74: { nextId: 89, slot: "team2" },
+  75: { nextId: 90, slot: "team1" },
+  76: { nextId: 90, slot: "team2" },
+  77: { nextId: 91, slot: "team1" },
   78: { nextId: 91, slot: "team2" },
   79: { nextId: 92, slot: "team1" },
   80: { nextId: 92, slot: "team2" },
-  83: { nextId: 93, slot: "team1" },
-  84: { nextId: 93, slot: "team2" },
-  81: { nextId: 94, slot: "team1" },
-  82: { nextId: 94, slot: "team2" },
-  86: { nextId: 95, slot: "team1" },
-  88: { nextId: 95, slot: "team2" },
-  85: { nextId: 96, slot: "team1" },
-  87: { nextId: 96, slot: "team2" },
+  81: { nextId: 93, slot: "team1" },
+  82: { nextId: 93, slot: "team2" },
+  83: { nextId: 94, slot: "team1" },
+  84: { nextId: 94, slot: "team2" },
+  85: { nextId: 95, slot: "team1" },
+  86: { nextId: 95, slot: "team2" },
+  87: { nextId: 96, slot: "team1" },
+  88: { nextId: 96, slot: "team2" },
   89: { nextId: 97, slot: "team1" },
   90: { nextId: 97, slot: "team2" },
   93: { nextId: 98, slot: "team1" },
@@ -398,6 +400,14 @@ let matchResults = {};
 let currentTab = "round32";
 let currentModalMatch = null;
 let isAdmin = false;
+
+// Hàm tiện ích: Chuyển đổi chuỗi ngày "DD/MM" và giờ "HH:MM" thành một mốc thời gian để so sánh
+function parseMatchDateTime(dateStr, timeStr) {
+  const [day, month] = dateStr.split("/").map(Number);
+  const [hours, minutes] = timeStr.split(":").map(Number);
+  // Mặc định năm là 2026 dựa trên giải đấu World Cup 2026
+  return new Date(2026, month - 1, day, hours, minutes).getTime();
+}
 
 function checkAdminPrivilege() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -463,7 +473,6 @@ function getStatusBadge(status) {
   }
 }
 
-// Hàm tính toán đội chiến thắng bao gồm cả loạt sút luân lưu (Penalty)
 function determineWinner(team1, team2, score1, score2, pen1, pen2) {
   if (score1 === "" || score2 === "") return { winner: null, loser: null };
   const s1 = parseInt(score1);
@@ -472,7 +481,6 @@ function determineWinner(team1, team2, score1, score2, pen1, pen2) {
   if (s1 > s2) return { winner: team1, loser: team2 };
   if (s2 > s1) return { winner: team2, loser: team1 };
 
-  // Nếu hòa hiệp chính + phụ, xét tiếp tỷ số Penalty
   if (pen1 !== "" && pen2 !== "") {
     const p1 = parseInt(pen1);
     const p2 = parseInt(pen2);
@@ -482,7 +490,6 @@ function determineWinner(team1, team2, score1, score2, pen1, pen2) {
   return { winner: null, loser: null };
 }
 
-// Sửa lỗi chức năng cập nhật trạng thái của Admin tại đây
 function updateTree() {
   rounds = JSON.parse(JSON.stringify(originalRounds));
   const findAndSetTeam = (mId, teamName, slot) => {
@@ -499,7 +506,6 @@ function updateTree() {
     for (let m of r.matches) {
       const res = getResult(m.id);
 
-      // FIX: Lấy chính xác trạng thái từ dữ liệu lưu trữ do Admin chọn thay vì tự động gán "finished"
       if (matchResults[m.id] && matchResults[m.id].status) {
         m.status = matchResults[m.id].status;
       }
@@ -593,7 +599,14 @@ function renderMatches() {
     if (round) matchesToShow = round.matches;
   }
 
-  const filtered = matchesToShow.filter((match) => {
+  // THAY ĐỔI TẠI ĐÂY: Sao chép mảng trận đấu và tiến hành sắp xếp theo thời gian tăng dần (gần nhất lên đầu)
+  const sortedMatches = [...matchesToShow].sort((a, b) => {
+    return (
+      parseMatchDateTime(a.date, a.time) - parseMatchDateTime(b.date, b.time)
+    );
+  });
+
+  const filtered = sortedMatches.filter((match) => {
     const t1 = match.team1 ? match.team1.toLowerCase() : "";
     const t2 = match.team2 ? match.team2.toLowerCase() : "";
     return (
@@ -614,7 +627,6 @@ function renderMatches() {
     matchEl.setAttribute("data-id", match.id);
     matchEl.onclick = () => showMatchModal(match);
 
-    // Hiển thị text tỷ số kèm loạt đá Pen nếu có kết quả Penalty
     let scoreDisplay = `<div class="vs-label">VS</div>`;
     if (res.score1 !== "" && res.score2 !== "") {
       const penText =
@@ -736,7 +748,6 @@ function showMatchModal(match) {
   const inputClass = isAdmin ? "score-input" : "score-input score-readonly";
   const disabledAttr = isAdmin ? "" : "disabled";
 
-  // Thêm khu vực điền thông tin luân lưu Pen khi mở Modal
   document.getElementById("modalTeams").innerHTML = `
     <div class="team-block">
       <img src="${getFlagUrl(match.team1)}" alt="">
@@ -757,7 +768,6 @@ function showMatchModal(match) {
     </div>
   `;
 
-  // Lắng nghe sự kiện thay đổi tỷ số để tự động ẩn hiện ô nhập Penalty tiện lợi cho Admin
   if (isAdmin) {
     const checkScoresTogglePen = () => {
       const s1 = document.getElementById("score1").value;
@@ -854,7 +864,6 @@ async function saveMatchResult() {
     p2,
   );
 
-  // Lưu toàn bộ dữ liệu bao gồm cả tỷ số pen và trạng thái cụ thể của trận đấu lên cloud đối tượng kết quả
   matchResults[currentModalMatch.id] = {
     score1: s1,
     score2: s2,
