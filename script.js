@@ -409,13 +409,12 @@ function checkAdminPrivilege() {
       badge.textContent = "ADMIN";
       badge.style.background = "#fee2e2";
       badge.style.color = "#dc2626";
-      badge.style.display = "block";
     } else {
       badge.textContent = "USER";
       badge.style.background = "#f1f5f9";
       badge.style.color = "#64748b";
-      badge.style.display = "block";
     }
+    badge.style.display = "block";
   }
 }
 
@@ -444,6 +443,9 @@ function getResult(matchId) {
     matchResults[matchId] || {
       score1: "",
       score2: "",
+      pen1: "",
+      pen2: "",
+      status: "scheduled",
       winner: null,
       loser: null,
     }
@@ -461,15 +463,26 @@ function getStatusBadge(status) {
   }
 }
 
-function determineWinner(team1, team2, score1, score2) {
+// Hàm tính toán đội chiến thắng bao gồm cả loạt sút luân lưu (Penalty)
+function determineWinner(team1, team2, score1, score2, pen1, pen2) {
   if (score1 === "" || score2 === "") return { winner: null, loser: null };
   const s1 = parseInt(score1);
   const s2 = parseInt(score2);
+
   if (s1 > s2) return { winner: team1, loser: team2 };
   if (s2 > s1) return { winner: team2, loser: team1 };
+
+  // Nếu hòa hiệp chính + phụ, xét tiếp tỷ số Penalty
+  if (pen1 !== "" && pen2 !== "") {
+    const p1 = parseInt(pen1);
+    const p2 = parseInt(pen2);
+    if (p1 > p2) return { winner: team1, loser: team2 };
+    if (p2 > p1) return { winner: team2, loser: team1 };
+  }
   return { winner: null, loser: null };
 }
 
+// Sửa lỗi chức năng cập nhật trạng thái của Admin tại đây
 function updateTree() {
   rounds = JSON.parse(JSON.stringify(originalRounds));
   const findAndSetTeam = (mId, teamName, slot) => {
@@ -485,9 +498,12 @@ function updateTree() {
   for (let r of rounds) {
     for (let m of r.matches) {
       const res = getResult(m.id);
-      if (res.score1 !== "" && res.score2 !== "") {
-        m.status = "finished";
+
+      // FIX: Lấy chính xác trạng thái từ dữ liệu lưu trữ do Admin chọn thay vì tự động gán "finished"
+      if (matchResults[m.id] && matchResults[m.id].status) {
+        m.status = matchResults[m.id].status;
       }
+
       if (res.winner && nextMatchMap[m.id]) {
         const target = nextMatchMap[m.id];
         findAndSetTeam(target.nextId, res.winner, target.slot);
@@ -597,6 +613,17 @@ function renderMatches() {
     matchEl.className = "match-card";
     matchEl.setAttribute("data-id", match.id);
     matchEl.onclick = () => showMatchModal(match);
+
+    // Hiển thị text tỷ số kèm loạt đá Pen nếu có kết quả Penalty
+    let scoreDisplay = `<div class="vs-label">VS</div>`;
+    if (res.score1 !== "" && res.score2 !== "") {
+      const penText =
+        res.pen1 !== "" && res.pen2 !== ""
+          ? `<small style="display:block;font-size:11px;color:#ef4444;">(Pen: ${res.pen1} - ${res.pen2})</small>`
+          : "";
+      scoreDisplay = `<div class="match-score">${res.score1} - ${res.score2}${penText}</div>`;
+    }
+
     matchEl.innerHTML = `
       <div class="match-card-header">
         <span class="match-id">#${match.id}</span>
@@ -613,7 +640,7 @@ function renderMatches() {
         <div class="vs-container">
           <div class="vs-time">${match.time}</div>
           <div class="vs-date">${match.date}</div>
-          ${res.score1 !== "" ? `<div class="match-score">${res.score1} - ${res.score2}</div>` : `<div class="vs-label">VS</div>`}
+          ${scoreDisplay}
         </div>
         <div class="team ${res.winner && res.winner === match.team2 ? "winner" : ""}">
           <img src="${getFlagUrl(match.team2)}" alt="">
@@ -645,6 +672,15 @@ function renderBracket() {
               ${round.matches
                 .map((m) => {
                   const res = getResult(m.id);
+                  const penText1 =
+                    res.pen1 !== "" && res.pen2 !== ""
+                      ? `<span style="font-size:10px;color:#ef4444;margin-left:4px;">(${res.pen1})</span>`
+                      : "";
+                  const penText2 =
+                    res.pen1 !== "" && res.pen2 !== ""
+                      ? `<span style="font-size:10px;color:#ef4444;margin-left:4px;">(${res.pen2})</span>`
+                      : "";
+
                   return `
                   <div class="bracket-match-node" onclick="showMatchModalFromId(${m.id})">
                     <div class="node-header">
@@ -657,14 +693,14 @@ function renderBracket() {
                           <img src="${getFlagUrl(m.team1)}">
                           <span class="team-name">${m.team1 || "Chưa xác định"}</span>
                         </div>
-                        <span class="team-score">${res.score1 !== "" ? res.score1 : "-"}</span>
+                        <span class="team-score">${res.score1 !== "" ? res.score1 : "-"}${penText1}</span>
                       </div>
                       <div class="node-team ${res.winner && res.winner === m.team2 ? "winner" : ""} ${!m.team2 ? "empty" : ""}">
                         <div class="node-team-info">
                           <img src="${getFlagUrl(m.team2)}">
                           <span class="team-name">${m.team2 || "Chưa xác định"}</span>
                         </div>
-                        <span class="team-score">${res.score2 !== "" ? res.score2 : "-"}</span>
+                        <span class="team-score">${res.score2 !== "" ? res.score2 : "-"}${penText2}</span>
                       </div>
                     </div>
                   </div>
@@ -700,19 +736,47 @@ function showMatchModal(match) {
   const inputClass = isAdmin ? "score-input" : "score-input score-readonly";
   const disabledAttr = isAdmin ? "" : "disabled";
 
+  // Thêm khu vực điền thông tin luân lưu Pen khi mở Modal
   document.getElementById("modalTeams").innerHTML = `
     <div class="team-block">
       <img src="${getFlagUrl(match.team1)}" alt="">
       <div class="modal-team-name">${match.team1}</div>
-      <input type="number" id="score1" class="${inputClass}" value="${res.score1}" min="0" ${disabledAttr}>
+      <div style="display:flex; flex-direction:column; gap:4px; align-items:center;">
+         <input type="number" id="score1" class="${inputClass}" value="${res.score1}" min="0" ${disabledAttr} placeholder="Bàn thắng">
+         <input type="number" id="pen1" class="${inputClass}" value="${res.pen1 || ""}" min="0" ${disabledAttr} placeholder="Pen" style="width:55px; border-color:#ef4444; font-size:12px; ${res.score1 === res.score2 && res.score1 !== "" ? "" : "display:none;"}">
+      </div>
     </div>
     <div class="vs-big">VS</div>
     <div class="team-block">
       <img src="${getFlagUrl(match.team2)}" alt="">
       <div class="modal-team-name">${match.team2}</div>
-      <input type="number" id="score2" class="${inputClass}" value="${res.score2}" min="0" ${disabledAttr}>
+      <div style="display:flex; flex-direction:column; gap:4px; align-items:center;">
+         <input type="number" id="score2" class="${inputClass}" value="${res.score2}" min="0" ${disabledAttr} placeholder="Bàn thắng">
+         <input type="number" id="pen2" class="${inputClass}" value="${res.pen2 || ""}" min="0" ${disabledAttr} placeholder="Pen" style="width:55px; border-color:#ef4444; font-size:12px; ${res.score1 === res.score2 && res.score1 !== "" ? "" : "display:none;"}">
+      </div>
     </div>
   `;
+
+  // Lắng nghe sự kiện thay đổi tỷ số để tự động ẩn hiện ô nhập Penalty tiện lợi cho Admin
+  if (isAdmin) {
+    const checkScoresTogglePen = () => {
+      const s1 = document.getElementById("score1").value;
+      const s2 = document.getElementById("score2").value;
+      const p1Input = document.getElementById("pen1");
+      const p2Input = document.getElementById("pen2");
+      if (s1 !== "" && s2 !== "" && parseInt(s1) === parseInt(s2)) {
+        p1Input.style.display = "block";
+        p2Input.style.display = "block";
+      } else {
+        p1Input.style.display = "none";
+        p2Input.style.display = "none";
+        p1Input.value = "";
+        p2Input.value = "";
+      }
+    };
+    document.getElementById("score1").oninput = checkScoresTogglePen;
+    document.getElementById("score2").oninput = checkScoresTogglePen;
+  }
 
   document.getElementById("modalTime").textContent = match.time;
   document.getElementById("modalDate").innerHTML = `📅 Ngày ${match.date}/2026`;
@@ -759,17 +823,26 @@ async function saveMatchResult() {
   if (!isAdmin || !currentModalMatch) return;
   const s1 = document.getElementById("score1").value;
   const s2 = document.getElementById("score2").value;
+  const p1 = document.getElementById("pen1").value;
+  const p2 = document.getElementById("pen2").value;
   const selectedStatus = document.getElementById("modalStatusSelect").value;
 
   if (selectedStatus === "finished" && (s1 === "" || s2 === "")) {
-    alert("Ban tổ chức vui lòng nhập đầy đủ tỷ số!");
+    alert("Ban tổ chức vui lòng nhập đầy đủ tỷ số trận đấu!");
     return;
   }
+
   if (selectedStatus === "finished" && parseInt(s1) === parseInt(s2)) {
-    alert(
-      "Trận Knockout bắt buộc phải tính cả luân lưu penalty để tìm đội đi tiếp!",
-    );
-    return;
+    if (p1 === "" || p2 === "") {
+      alert(
+        "Trận đấu có kết quả hòa, vui lòng nhập kết quả sút luân lưu Pen để tìm đội đi tiếp!",
+      );
+      return;
+    }
+    if (parseInt(p1) === parseInt(p2)) {
+      alert("Tỷ số đá luân lưu Penalty không thể hòa nhau!");
+      return;
+    }
   }
 
   const outcome = determineWinner(
@@ -777,13 +850,21 @@ async function saveMatchResult() {
     currentModalMatch.team2,
     s1,
     s2,
+    p1,
+    p2,
   );
+
+  // Lưu toàn bộ dữ liệu bao gồm cả tỷ số pen và trạng thái cụ thể của trận đấu lên cloud đối tượng kết quả
   matchResults[currentModalMatch.id] = {
     score1: s1,
     score2: s2,
+    pen1: p1,
+    pen2: p2,
+    status: selectedStatus,
     winner: outcome.winner,
     loser: outcome.loser,
   };
+
   currentModalMatch.status = selectedStatus;
 
   updateTree();
