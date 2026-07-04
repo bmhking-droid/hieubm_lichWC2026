@@ -158,54 +158,54 @@ const originalRounds = [
     name: "VÒNG 1/8",
     matches: [
       {
-        id: 90,
+        id: 89,
         date: "05/07",
-        time: "00:00",
+        time: "04:00", // Cập nhật: Thắng 73 vs Thắng 74 (Paraguay – Pháp)
         team1: "",
         team2: "",
         venue: "NRG Stadium, Houston",
         status: "scheduled",
       },
       {
-        id: 89,
+        id: 90,
         date: "05/07",
-        time: "04:00",
+        time: "00:00", // Cập nhật: Thắng 75 vs Thắng 76 (Canada – Morocco)
         team1: "",
         team2: "",
         venue: "Lincoln Financial Field, Philadelphia",
         status: "scheduled",
       },
       {
-        id: 93,
-        date: "06/07",
-        time: "03:00",
+        id: 91,
+        date: "07/07",
+        time: "02:00", // Cập nhật: Thắng 77 vs Thắng 78 (Bồ Đào Nha – Tây Ban Nha)
         team1: "",
         team2: "",
         venue: "MetLife Stadium, New York",
         status: "scheduled",
       },
       {
-        id: 94,
-        date: "06/07",
-        time: "07:00",
+        id: 92,
+        date: "07/07",
+        time: "07:00", // Cập nhật: Thắng 79 vs Thắng 80 (Mỹ - Bỉ)
         team1: "",
         team2: "",
         venue: "Azteca Stadium, Mexico City",
         status: "scheduled",
       },
       {
-        id: 91,
-        date: "07/07",
-        time: "02:00",
+        id: 93,
+        date: "06/07",
+        time: "03:00", // Cập nhật: Thắng 81 vs Thắng 82 (Brazil – Na Uy)
         team1: "",
         team2: "",
         venue: "AT&T Stadium, Dallas",
         status: "scheduled",
       },
       {
-        id: 92,
-        date: "07/07",
-        time: "07:00",
+        id: 94,
+        date: "06/07",
+        time: "07:00", // Cập nhật: Thắng 83 vs Thắng 84 (Mexico – Anh)
         team1: "",
         team2: "",
         venue: "Lumen Field, Seattle",
@@ -214,7 +214,7 @@ const originalRounds = [
       {
         id: 95,
         date: "07/07",
-        time: "23:00",
+        time: "23:00", // Cập nhật: Thắng 85 vs Thắng 86 (Argentina – Ai Cập)
         team1: "",
         team2: "",
         venue: "Mercedes-Benz Stadium, Atlanta",
@@ -223,7 +223,7 @@ const originalRounds = [
       {
         id: 96,
         date: "08/07",
-        time: "03:00",
+        time: "03:00", // Cập nhật: Thắng 87 vs Thắng 88 (Thụy Sĩ – Colombia)
         team1: "",
         team2: "",
         venue: "BC Place, Vancouver",
