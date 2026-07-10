@@ -245,7 +245,7 @@ const originalRounds = [
         status: "scheduled",
       },
       {
-        id: 98,
+        id: 99,
         date: "11/07",
         time: "02:00",
         team1: "",
@@ -254,7 +254,7 @@ const originalRounds = [
         status: "scheduled",
       },
       {
-        id: 99,
+        id: 98,
         date: "12/07",
         time: "04:00",
         team1: "",
@@ -355,8 +355,8 @@ const nextMatchMap = {
   95: { nextId: 100, slot: "team1" },
   96: { nextId: 100, slot: "team2" },
   97: { nextId: 101, slot: "team1" },
-  98: { nextId: 101, slot: "team2" },
-  99: { nextId: 102, slot: "team1" },
+  98: { nextId: 102, slot: "team2" },
+  99: { nextId: 101, slot: "team1" },
   100: { nextId: 102, slot: "team2" },
 };
 
